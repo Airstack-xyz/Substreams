@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package token_tracker;
+
+enum AirTokenStandard{
+    UNKNOWN = 0;
+    ERC20 = 1;
+    ERC721 = 2;
+    ERC1155 = 3;
+}
+
+message AirTransfers{
+    repeated AirTransfer air_transfers = 1;
+    repeated AirERC1155TransferBatch air_transfer_batchs = 2;
+    repeated AirERC1155TransferSingle air_transfer_singles = 3;
+}
+
+message AirTransfer{
+    string hash = 1;
+    uint64 log_ordinal = 2;
+    string token_id = 3;
+    string from = 4;
+    string to = 5;
+    string amount = 6;
+    AirTokenStandard token_type = 7;
+    uint64 block_number = 8;
+    string block_timestamp = 9;
+}
+
+message AirERC1155TransferBatch{
+    string hash = 1;
+    uint64 log_ordinal = 2;
+    repeated string token_ids = 3;
+    string operator = 4;
+    string from = 5;
+    string to = 6;
+    repeated string amounts = 7;
+    AirTokenStandard token_type = 8;
+    uint64 block_number = 9;
+    string block_timestamp = 10;
+}
+
+message AirERC1155TransferSingle{
+    string hash = 1;
+    uint64 log_ordinal = 2;
+    string token_id = 3;
+    string operator = 4;
+    string from = 5;
+    string to = 6;
+    string amount = 7;
+    AirTokenStandard token_type = 8;
+    uint64 block_number = 9;
+    string block_timestamp = 10;
+}
