@@ -1,6 +1,5 @@
 mod abis;
 mod pb;
-mod rpc;
 
 use pb::token_tracker::{AirTransfers, AirTransfer, AirErc1155TransferBatch, AirErc1155TransferSingle};
 use substreams::store;
@@ -11,21 +10,51 @@ use substreams_ethereum::{pb::eth::v2 as eth, Event as EventTrait};
 #[substreams::handlers::map]
 fn map_transfers(blk: eth::Block) -> Result<AirTransfers, Error> {
     let mut air_transfers = vec![];
-    let mut air_transfer_batchs = vec![];
-    let mut air_transfer_singles = vec![];
+    let mut air_erc1155_transfer_batchs = vec![];
+    let mut air_erc1155_transfer_singles = vec![];
     for log in blk.logs(){
-        if let Some(event) = abis::erc20::events::Transfer::match_and_decode(log){
-            log::info!("transfer event: {}", Hex(&event.to));
-            // log::info!("ERC20 token: {}, {}, {}", Hex(log.log.clone().address), log.receipt.transaction.hash.clone().to_string(), log.ordinal());
+        match &log.receipt.transaction.value {
+            Some(value) =>{
+                log::info!("Tx Hash {}", Hex(log.receipt.transaction.hash.clone()).to_string());
+                let len = 8.min(value.bytes.len());
+                let mut value_processed = [0u8; 8];
+                value_processed[..len].copy_from_slice(&value.bytes[..len]);
+                let base_token_transfer: AirTransfer = AirTransfer{
+                    amount: u64::from_be_bytes(value_processed[0..8].try_into().unwrap()).to_string(),
+                    token_address: String::from("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"),
+                    chain_id:1,
+                    hash:Hex(log.receipt.transaction.hash.clone()).to_string(),
+                    from: Hex(log.receipt.transaction.from.clone()).to_string(),
+                    to: Hex(log.receipt.transaction.to.clone()).to_string(),
+                    token_type: 4,
+                    block_number: blk.number,
+                    block_timestamp: blk.clone()
+                    .header
+                    .as_ref()
+                    .unwrap()
+                    .timestamp
+                    .as_ref()
+                    .unwrap()
+                    .seconds as u64,
+                    log_ordinal: log.ordinal(),
+                    ..Default::default()
+                };
+                air_transfers.push(base_token_transfer); 
+            }
+            None => {}
+        }
 
-            let air_transfer: AirTransfer = AirTransfer{
+        if let Some(event) = abis::erc20::events::Transfer::match_and_decode(log){
+            log::info!("Tx Hash {}", Hex(log.receipt.transaction.hash.clone()).to_string());
+            let erc20_transfer: AirTransfer = AirTransfer{
                 amount: event.value.to_string(),
-                token_id: Hex(log.log.clone().address).to_string(),
+                token_address: Hex(log.log.clone().address).to_string(),
+                chain_id: 1,
                 hash: Hex(log.receipt.transaction.hash.clone()).to_string(),
                 from: Hex(event.from).to_string(),
                 to: Hex(event.to).to_string(),
                 token_type: 0,
-                block_number: blk.clone().number,
+                block_number: blk.number,
                 block_timestamp: blk.clone()
                 .header
                 .as_ref()
@@ -33,19 +62,19 @@ fn map_transfers(blk: eth::Block) -> Result<AirTransfers, Error> {
                 .timestamp
                 .as_ref()
                 .unwrap()
-                .seconds
-                .to_string(),
+                .seconds as u64,
                 log_ordinal: log.ordinal(),
                 ..Default::default()
             };
     
-            air_transfers.push(air_transfer);
+            air_transfers.push(erc20_transfer);
         }
         if let Some(event) = abis::erc721::events::Transfer::match_and_decode(log){
-            log::info!("transfer event: {}", Hex(&event.to));
-            // log::info!("ERC721 token: {}, {}", log.receipt.transaction.hash.clone().to_string(), log.ordinal());
-            let air_transfer: AirTransfer = AirTransfer{
+            log::info!("Tx Hash {}", Hex(log.receipt.transaction.hash.clone()).to_string());
+            let erc721_transfer: AirTransfer = AirTransfer{
                 amount: 1.to_string(),
+                chain_id: 1,
+                token_address: Hex(log.log.clone().address).to_string(),
                 token_id: event.token_id.to_string(),
                 hash: Hex(log.receipt.transaction.hash.clone()).to_string(),
                 from: Hex(event.from).to_string(),
@@ -59,19 +88,18 @@ fn map_transfers(blk: eth::Block) -> Result<AirTransfers, Error> {
                 .timestamp
                 .as_ref()
                 .unwrap()
-                .seconds
-                .to_string(),
+                .seconds as u64,
                 log_ordinal: log.ordinal(),
                 ..Default::default()
             };
-            air_transfers.push(air_transfer);
+            air_transfers.push(erc721_transfer);
         }
         if let Some(event) = abis::erc1155::events::TransferBatch::match_and_decode(log){
-            log::info!("transfer event: {}", Hex(&event.to));
-            // log::info!("transfer values: {}", &event.values);
-            let air_transfer_batch: AirErc1155TransferBatch = AirErc1155TransferBatch{
+            log::info!("Tx Hash {}", Hex(log.receipt.transaction.hash.clone()).to_string());
+            let erc1155_transfer_batch: AirErc1155TransferBatch = AirErc1155TransferBatch{
                 amounts: event.values.iter().map(|c| c.clone().to_string()).collect(),
                 hash: Hex(log.receipt.transaction.hash.clone()).to_string(),
+                chain_id: 1,
                 from: Hex(event.from).to_string(),
                 to: Hex(event.to).to_string(),
                 token_type:3,
@@ -83,19 +111,19 @@ fn map_transfers(blk: eth::Block) -> Result<AirTransfers, Error> {
                 .timestamp
                 .as_ref()
                 .unwrap()
-                .seconds
-                .to_string(),
+                .seconds as u64,
                 token_ids: event.ids.iter().map(|id| Hex(id.clone()).0.to_string()).collect(),
                 log_ordinal: log.ordinal(),
                 ..Default::default()
             };
-            air_transfer_batchs.push(air_transfer_batch);
+            air_erc1155_transfer_batchs.push(erc1155_transfer_batch);
         }
         if let Some(event) = abis::erc1155::events::TransferSingle::match_and_decode(log){
-            log::info!("transfer event: {}", Hex(&event.to));
-            let air_transfer_single: AirErc1155TransferSingle = AirErc1155TransferSingle{
+            log::info!("Tx Hash {}", Hex(log.receipt.transaction.hash.clone()).to_string());
+            let erc1155_transfer_single: AirErc1155TransferSingle = AirErc1155TransferSingle{
                 amount: event.value.to_string(),
                 hash: Hex(log.receipt.transaction.hash.clone()).to_string(),
+                chain_id: 1,
                 from: Hex(event.from).to_string(),
                 to: Hex(event.to).to_string(),
                 token_type:3,
@@ -107,24 +135,25 @@ fn map_transfers(blk: eth::Block) -> Result<AirTransfers, Error> {
                 .timestamp
                 .as_ref()
                 .unwrap()
-                .seconds
-                .to_string(),
+                .seconds as u64,
                 token_id: event.id.to_string(),
                 log_ordinal: log.ordinal(),
                 ..Default::default()
             };
-            air_transfer_singles.push(air_transfer_single);
+            air_erc1155_transfer_singles.push(erc1155_transfer_single);
         }
     }
-    Ok(AirTransfers{ air_transfers, air_transfer_batchs, air_transfer_singles })
+    Ok(AirTransfers{ air_transfers, air_erc1155_transfer_batchs, air_erc1155_transfer_singles })
 }
 
 #[substreams::handlers::store]
 fn store_transfers(transfers: AirTransfers, output: store::StoreSet){
     for transfer in transfers.air_transfers{
+        let mut key = transfer.clone().hash;
+        key.push_str(&transfer.log_ordinal.to_string());
         output.set(
             transfer.log_ordinal,
-            &transfer.hash,
+            key,
             &proto::encode(&transfer).unwrap(),
         );
     }
@@ -132,10 +161,12 @@ fn store_transfers(transfers: AirTransfers, output: store::StoreSet){
 
 #[substreams::handlers::store]
 fn store_erc1155_batch(transfers: AirTransfers, output: store::StoreSet){
-    for transfer in transfers.air_transfer_batchs{
+    for transfer in transfers.air_erc1155_transfer_batchs{
+        let mut key = transfer.clone().hash;
+        key.push_str(&transfer.log_ordinal.to_string());
         output.set(
             transfer.log_ordinal, 
-            &transfer.hash, 
+            key, 
             &proto::encode(&transfer).unwrap()
         );
     }
@@ -143,10 +174,12 @@ fn store_erc1155_batch(transfers: AirTransfers, output: store::StoreSet){
 
 #[substreams::handlers::store]
 fn store_erc1155_single(transfers: AirTransfers, output: store::StoreSet){
-    for transfer in transfers.air_transfer_singles{
+    for transfer in transfers.air_erc1155_transfer_singles{
+        let mut key = transfer.clone().hash;
+        key.push_str(&transfer.log_ordinal.to_string());
         output.set(
             transfer.log_ordinal, 
-            &transfer.hash, 
+            key, 
             &proto::encode(&transfer).unwrap()
         );
     }

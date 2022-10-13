@@ -20,7 +20,7 @@ binaries:
 modules:
   - name: map_transfers
     kind: map
-    initialBlock: 12369621
+    initialBlock: 0
     inputs:
       - source: sf.ethereum.type.v2.Block
     output:
