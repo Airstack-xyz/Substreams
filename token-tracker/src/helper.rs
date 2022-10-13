@@ -2,7 +2,7 @@ use crate::{
     abi,
     pb::token_tracker::{self},
 };
-use substreams::{log, Hex};
+use substreams::Hex;
 
 // pub const ERC721_IFACE_ID: [u8; 4] = <[u8; 4]>::from_hex("01ffc9a7").unwrap();
 pub const ERC721_IFACE_ID: [u8; 4] = [0x01, 0xff, 0xc9, 0xa7];
@@ -40,7 +40,7 @@ pub fn get_token(
     if decimals_res.is_some() {
         let decimals = decimals_res.unwrap();
         return Some(token_tracker::Token {
-            chain_id: None,
+            chain_id: 1.to_string(),
             token_address: token_address.clone(),
             token_type: 1,
             deployment_transaction_hash: tx_hash,
@@ -61,14 +61,16 @@ pub fn get_token(
     }
     .call(token_address_bytes.clone());
 
-    let eip155_metadata_iface_resp = erc1155_functions::SupportsInterface {
-        interface_id: ERC1155_METADATA_URI_IFACE_ID,
-    }
-    .call(token_address_bytes.clone());
+    // let eip155_metadata_iface_resp = erc1155_functions::SupportsInterface {
+    //     interface_id: ERC1155_METADATA_URI_IFACE_ID,
+    // }
+    // .call(token_address_bytes.clone());
 
-    if eip155_iface_resp == Some(true) || eip155_metadata_iface_resp == Some(true) {
+    if eip155_iface_resp == Some(true)
+    // || eip155_metadata_iface_resp == Some(true)
+    {
         return Some(token_tracker::Token {
-            chain_id: None,
+            chain_id: 1.to_string(),
             token_address: token_address.clone(),
             token_type: 3,
             deployment_transaction_hash: tx_hash,
@@ -90,27 +92,26 @@ pub fn get_token(
     }
     .call(token_address_bytes.clone());
 
-    let eip721_metadata_iface_resp = erc721_functions::SupportsInterface {
-        interface_id: ERC721_METADATA_IFACE_ID,
-    }
-    .call(token_address_bytes.clone());
+    // let eip721_metadata_iface_resp = erc721_functions::SupportsInterface {
+    //     interface_id: ERC721_METADATA_IFACE_ID,
+    // }
+    // .call(token_address_bytes.clone());
 
-    let eip721_enumerable_iface_resp = erc721_functions::SupportsInterface {
-        interface_id: ERC721_ENUMERABLE_IFACE_ID,
-    }
-    .call(token_address_bytes.clone());
+    // let eip721_enumerable_iface_resp = erc721_functions::SupportsInterface {
+    //     interface_id: ERC721_ENUMERABLE_IFACE_ID,
+    // }
+    // .call(token_address_bytes.clone());
 
-    if eip155_iface_resp == Some(true)
-        || eip721_metadata_iface_resp == Some(true)
-        || eip721_enumerable_iface_resp == Some(true)
+    if eip721_iface_resp == Some(true)
+    // || eip721_metadata_iface_resp == Some(true)
+    // || eip721_enumerable_iface_resp == Some(true)
     {
-
         let name_res = erc721_functions::Name {}.call(token_address_bytes.clone());
-    let symbol_res = erc721_functions::Symbol {}.call(token_address_bytes.clone());
-    let total_supply_res = erc721_functions::TotalSupply {}.call(token_address_bytes.clone());
+        let symbol_res = erc721_functions::Symbol {}.call(token_address_bytes.clone());
+        let total_supply_res = erc721_functions::TotalSupply {}.call(token_address_bytes.clone());
 
         return Some(token_tracker::Token {
-            chain_id: None,
+            chain_id: 1.to_string(),
             token_address: token_address.clone(),
             token_type: 2,
             deployment_transaction_hash: tx_hash,

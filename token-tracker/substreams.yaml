@@ -20,7 +20,7 @@ binaries:
 modules:
   - name: block_to_tokens
     kind: map
-    initialBlock: 13117018    
+    initialBlock: 0    
     inputs:
       - source: sf.ethereum.type.v2.Block
     output:

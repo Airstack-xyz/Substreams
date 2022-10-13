@@ -15,7 +15,7 @@ message Tokens {
 
   
   message Token {
-    optional string chainId = 1;
+    string chainId = 1;
     string tokenAddress = 2;
     TokenStandard tokenType = 3;
     string deploymentTransactionHash = 4;
