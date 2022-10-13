@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package token_tracker;
+
+enum TokenStandard{
+    UNKNOWN = 0;
+    ERC20 = 1;
+    ERC721 = 2;
+    ERC1155 = 3;
+}
+
+message Tokens {
+    repeated Token tokens = 1;
+  }
+
+  
+  message Token {
+    optional string chainId = 1;
+    string tokenAddress = 2;
+    TokenStandard tokenType = 3;
+    string deploymentTransactionHash = 4;
+    string deploymentBlock = 5;
+    string deploymentTimestamp = 6;
+    string deployer = 7;
+    optional string name = 8;
+    optional string symbol = 9;
+    optional uint64 decimals = 10; 
+    optional string totalSupply = 11;
+    optional string baseURI = 12;
+    optional string contractMetaDataURI = 13;
+  
+  }
