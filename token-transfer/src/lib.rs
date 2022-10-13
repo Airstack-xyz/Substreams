@@ -22,8 +22,9 @@ fn map_transfers(blk: eth::Block) -> Result<Transfers, Error> {
                 let base_token_transfer: Transfer = Transfer{
                     amount: u64::from_be_bytes(value_processed[0..8].try_into().unwrap()).to_string(),
                     token_address: String::from("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"),
-                    chain_id:1,
-                    hash:Hex(log.receipt.transaction.hash.clone()).to_string(),
+                    chain_id:1.to_string(),
+                    transaction_hash:Hex(log.receipt.transaction.hash.clone()).to_string(),
+                    operator:Hex(log.receipt.transaction.from.clone()).to_string(),
                     from: Hex(log.receipt.transaction.from.clone()).to_string(),
                     to: Hex(log.receipt.transaction.to.clone()).to_string(),
                     token_type: 4,
@@ -49,8 +50,9 @@ fn map_transfers(blk: eth::Block) -> Result<Transfers, Error> {
             let erc20_transfer: Transfer = Transfer{
                 amount: event.value.to_string(),
                 token_address: Hex(log.log.clone().address).to_string(),
-                chain_id: 1,
-                hash: Hex(log.receipt.transaction.hash.clone()).to_string(),
+                chain_id: 1.to_string(),
+                transaction_hash: Hex(log.receipt.transaction.hash.clone()).to_string(),
+                operator: Hex(log.receipt.transaction.from.clone()).to_string(),
                 from: Hex(event.from).to_string(),
                 to: Hex(event.to).to_string(),
                 token_type: 0,
@@ -73,14 +75,15 @@ fn map_transfers(blk: eth::Block) -> Result<Transfers, Error> {
             log::info!("Tx Hash {}", Hex(log.receipt.transaction.hash.clone()).to_string());
             let erc721_transfer: Transfer = Transfer{
                 amount: 1.to_string(),
-                chain_id: 1,
+                chain_id: 1.to_string(),
                 token_address: Hex(log.log.clone().address).to_string(),
                 token_id: event.token_id.to_string(),
-                hash: Hex(log.receipt.transaction.hash.clone()).to_string(),
+                transaction_hash: Hex(log.receipt.transaction.hash.clone()).to_string(),
+                operator: Hex(log.receipt.transaction.from.clone()).to_string(),
                 from: Hex(event.from).to_string(),
                 to: Hex(event.to).to_string(),
                 token_type:2,
-                block_number: blk.clone().number,
+                block_number: blk.number,
                 block_timestamp: blk.clone()
                 .header
                 .as_ref()
@@ -98,12 +101,14 @@ fn map_transfers(blk: eth::Block) -> Result<Transfers, Error> {
             log::info!("Tx Hash {}", Hex(log.receipt.transaction.hash.clone()).to_string());
             let erc1155_transfer_batch: Erc1155TransferBatch = Erc1155TransferBatch{
                 amounts: event.values.iter().map(|c| c.clone().to_string()).collect(),
-                hash: Hex(log.receipt.transaction.hash.clone()).to_string(),
-                chain_id: 1,
+                transaction_hash: Hex(log.receipt.transaction.hash.clone()).to_string(),
+                chain_id: 1.to_string(),
+                token_address: Hex(log.log.clone().address).to_string(),
+                operator: Hex(event.operator).to_string(),
                 from: Hex(event.from).to_string(),
                 to: Hex(event.to).to_string(),
                 token_type:3,
-                block_number: blk.clone().number,
+                block_number: blk.number,
                 block_timestamp: blk.clone()
                 .header
                 .as_ref()
@@ -122,12 +127,14 @@ fn map_transfers(blk: eth::Block) -> Result<Transfers, Error> {
             log::info!("Tx Hash {}", Hex(log.receipt.transaction.hash.clone()).to_string());
             let erc1155_transfer_single: Erc1155TransferSingle = Erc1155TransferSingle{
                 amount: event.value.to_string(),
-                hash: Hex(log.receipt.transaction.hash.clone()).to_string(),
-                chain_id: 1,
+                transaction_hash: Hex(log.receipt.transaction.hash.clone()).to_string(),
+                chain_id: 1.to_string(),
+                token_address: Hex(log.log.clone().address).to_string(),
+                operator: Hex(event.operator).to_string(),
                 from: Hex(event.from).to_string(),
                 to: Hex(event.to).to_string(),
                 token_type:3,
-                block_number: blk.clone().number,
+                block_number: blk.number,
                 block_timestamp: blk.clone()
                 .header
                 .as_ref()
