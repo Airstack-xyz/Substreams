@@ -19,7 +19,7 @@ message Transfers{
 message Transfer{
     string hash = 1;
     uint64 log_ordinal = 2;
-    uint32 chain_id = 3;
+    string chain_id = 3;
     string token_address = 4;
     string token_id = 5;
     string from = 6;
@@ -33,27 +33,29 @@ message Transfer{
 message ERC1155TransferBatch{
     string hash = 1;
     uint64 log_ordinal = 2;
-    uint32 chain_id = 3;
-    repeated string token_ids = 4;
-    string operator = 5;
-    string from = 6;
-    string to = 7;
-    repeated string amounts = 8;
-    TokenStandard token_type = 9;
-    uint64 block_number = 10;
-    uint64 block_timestamp = 11;
+    string chain_id = 3;
+    string token_address = 4;
+    repeated string token_ids = 5;
+    string operator = 6;
+    string from = 7;
+    string to = 8;
+    repeated string amounts = 9;
+    TokenStandard token_type = 10;
+    uint64 block_number = 11;
+    uint64 block_timestamp = 12;
 }
 
 message ERC1155TransferSingle{
     string hash = 1;
     uint64 log_ordinal = 2;
-    uint32 chain_id = 3;
-    string token_id = 4;
-    string operator = 5;
-    string from = 6;
-    string to = 7;
-    string amount = 8;
-    TokenStandard token_type = 9;
-    uint64 block_number = 10;
-    uint64 block_timestamp = 11;
+    string chain_id = 3;
+    string token_address = 4;
+    string token_id = 5;
+    string operator = 6;
+    string from = 7;
+    string to = 8;
+    string amount = 9;
+    TokenStandard token_type = 10;
+    uint64 block_number = 11;
+    uint64 block_timestamp = 12;
 }
