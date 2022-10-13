@@ -37,7 +37,7 @@ Just move to the root directory of your substream folder and run this command
 substreams run -e api-dev.streamingfast.io:443 \
    substreams.yaml \
    map_transfers,store_transfers \
-   --start-block 12369621 \
+   --start-block 0 \
    --stop-block 20000000
 ```
 

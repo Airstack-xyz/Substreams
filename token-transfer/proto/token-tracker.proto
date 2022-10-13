@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package token_tracker;
 
-enum AirTokenStandard{
+enum TokenStandard{
     UNKNOWN = 0;
     ERC20 = 1;
     ERC721 = 2;
@@ -10,13 +10,13 @@ enum AirTokenStandard{
     BASE_TOKEN = 4;
 }
 
-message AirTransfers{
-    repeated AirTransfer air_transfers = 1;
-    repeated AirERC1155TransferBatch air_erc1155_transfer_batchs = 2;
-    repeated AirERC1155TransferSingle air_erc1155_transfer_singles = 3;
+message Transfers{
+    repeated Transfer transfers = 1;
+    repeated ERC1155TransferBatch erc1155_transfer_batchs = 2;
+    repeated ERC1155TransferSingle erc1155_transfer_singles = 3;
 }
 
-message AirTransfer{
+message Transfer{
     string hash = 1;
     uint64 log_ordinal = 2;
     uint32 chain_id = 3;
@@ -25,12 +25,12 @@ message AirTransfer{
     string from = 6;
     string to = 7;
     string amount = 8;
-    AirTokenStandard token_type = 9;
+    TokenStandard token_type = 9;
     uint64 block_number = 10;
     uint64 block_timestamp = 11;
 }
 
-message AirERC1155TransferBatch{
+message ERC1155TransferBatch{
     string hash = 1;
     uint64 log_ordinal = 2;
     uint32 chain_id = 3;
@@ -39,12 +39,12 @@ message AirERC1155TransferBatch{
     string from = 6;
     string to = 7;
     repeated string amounts = 8;
-    AirTokenStandard token_type = 9;
+    TokenStandard token_type = 9;
     uint64 block_number = 10;
     uint64 block_timestamp = 11;
 }
 
-message AirERC1155TransferSingle{
+message ERC1155TransferSingle{
     string hash = 1;
     uint64 log_ordinal = 2;
     uint32 chain_id = 3;
@@ -53,7 +53,7 @@ message AirERC1155TransferSingle{
     string from = 6;
     string to = 7;
     string amount = 8;
-    AirTokenStandard token_type = 9;
+    TokenStandard token_type = 9;
     uint64 block_number = 10;
     uint64 block_timestamp = 11;
 }
