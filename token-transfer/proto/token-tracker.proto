@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package token_tracker;
+
+enum TokenStandard{
+    UNKNOWN = 0;
+    ERC20 = 1;
+    ERC721 = 2;
+    ERC1155 = 3;
+    BASE_TOKEN = 4;
+}
+
+message Transfers{
+    repeated Transfer transfers = 1;
+    repeated ERC1155TransferBatch erc1155_transfer_batchs = 2;
+    repeated ERC1155TransferSingle erc1155_transfer_singles = 3;
+}
+
+message Transfer{
+    string hash = 1;
+    uint64 log_ordinal = 2;
+    string chain_id = 3;
+    string token_address = 4;
+    string token_id = 5;
+    string from = 6;
+    string to = 7;
+    string amount = 8;
+    TokenStandard token_type = 9;
+    uint64 block_number = 10;
+    uint64 block_timestamp = 11;
+}
+
+message ERC1155TransferBatch{
+    string hash = 1;
+    uint64 log_ordinal = 2;
+    string chain_id = 3;
+    string token_address = 4;
+    repeated string token_ids = 5;
+    string operator = 6;
+    string from = 7;
+    string to = 8;
+    repeated string amounts = 9;
+    TokenStandard token_type = 10;
+    uint64 block_number = 11;
+    uint64 block_timestamp = 12;
+}
+
+message ERC1155TransferSingle{
+    string hash = 1;
+    uint64 log_ordinal = 2;
+    string chain_id = 3;
+    string token_address = 4;
+    string token_id = 5;
+    string operator = 6;
+    string from = 7;
+    string to = 8;
+    string amount = 9;
+    TokenStandard token_type = 10;
+    uint64 block_number = 11;
+    uint64 block_timestamp = 12;
+}
