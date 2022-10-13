@@ -1,0 +1,48 @@
+specVersion: v0.1.0
+package:
+  name: all_token_tracker
+  version: v0.1.0
+
+imports:
+  eth: https://github.com/streamingfast/sf-ethereum/releases/download/v0.10.2/ethereum-v0.10.4.spkg
+
+protobuf:
+  files:
+    - token-tracker.proto
+  importPaths:
+    - ./proto
+
+binaries:
+  default:
+    type: wasm/rust-v1
+    file: target/wasm32-unknown-unknown/release/all_token_tracker_substream.wasm
+
+modules:
+  - name: map_transfers
+    kind: map
+    initialBlock: 0
+    inputs:
+      - source: sf.ethereum.type.v2.Block
+    output:
+      type: proto:token_tracker.Transfers
+
+  - name: store_transfers
+    kind: store
+    updatePolicy: set
+    valueType: proto:token_tracker.Transfer
+    inputs:
+      - map: map_transfers
+
+  - name: store_erc1155_batch
+    kind: store
+    updatePolicy: set
+    valueType: proto:token_tracker.ERC1155TransferBatch
+    inputs:
+      - map: map_transfers
+
+  - name: store_erc1155_single
+    kind: store
+    updatePolicy: set
+    valueType: proto:token_tracker.ERC1155TransferSingle
+    inputs:
+      - map: map_transfers
