@@ -18,45 +18,50 @@ message Transfers{
 
 message Transfer{
     string transaction_hash = 1;
-    uint64 log_ordinal = 2;
-    string chain_id = 3;
-    string token_address = 4;
-    string token_id = 5;
-    string operator = 6;
-    string from = 7;
-    string to = 8;
-    string amount = 9;
-    TokenStandard token_type = 10;
-    uint64 block_number = 11;
-    uint64 block_timestamp = 12;
+    uint32 log_index = 2;
+    uint32 call_index =3;
+    uint32 call_depth =4;
+    string source =5;
+    string chain_id = 6;
+    string token_address = 7;
+    string token_id = 8;
+    string operator = 9;
+    string from = 10;
+    string to = 11;
+    string amount = 12;
+    TokenStandard token_type = 13;
+    uint64 block_number = 14;
+    uint64 block_timestamp = 15;
 }
 
 message ERC1155TransferBatch{
     string transaction_hash = 1;
-    uint64 log_ordinal = 2;
-    string chain_id = 3;
-    string token_address = 4;
-    repeated string token_ids = 5;
-    string operator = 6;
-    string from = 7;
-    string to = 8;
-    repeated string amounts = 9;
-    TokenStandard token_type = 10;
-    uint64 block_number = 11;
-    uint64 block_timestamp = 12;
+    uint32 log_index = 2;
+    string source =3;
+    string chain_id = 4;
+    string token_address = 5;
+    repeated string token_ids = 6;
+    string operator = 7;
+    string from = 8;
+    string to = 9;
+    repeated string amounts = 10;
+    TokenStandard token_type = 11;
+    uint64 block_number = 12;
+    uint64 block_timestamp = 13;
 }
 
 message ERC1155TransferSingle{
     string transaction_hash = 1;
-    uint64 log_ordinal = 2;
-    string chain_id = 3;
-    string token_address = 4;
-    string token_id = 5;
-    string operator = 6;
-    string from = 7;
-    string to = 8;
-    string amount = 9;
-    TokenStandard token_type = 10;
-    uint64 block_number = 11;
-    uint64 block_timestamp = 12;
+    uint32 log_index = 2;
+    string source =3;
+    string chain_id = 4;
+    string token_address = 5;
+    string token_id = 6;
+    string operator = 7;
+    string from = 8;
+    string to = 9;
+    string amount = 10;
+    TokenStandard token_type = 11;
+    uint64 block_number = 12;
+    uint64 block_timestamp = 13;
 }
