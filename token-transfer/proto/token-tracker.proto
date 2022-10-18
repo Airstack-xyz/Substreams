@@ -42,7 +42,7 @@ message Transfer{
 message ERC1155TransferBatch{
     string transaction_hash = 1;
     uint32 log_index = 2;
-    string source =3;
+    Source source =3;
     string chain_id = 4;
     string token_address = 5;
     repeated string token_ids = 6;
@@ -58,7 +58,7 @@ message ERC1155TransferBatch{
 message ERC1155TransferSingle{
     string transaction_hash = 1;
     uint32 log_index = 2;
-    string source =3;
+    Source source =3;
     string chain_id = 4;
     string token_address = 5;
     string token_id = 6;
