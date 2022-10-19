@@ -121,7 +121,11 @@ pub fn get_token(
             name: name_res,
             symbol: symbol_res,
             decimals: None,
-            total_supply: Some(total_supply_res.unwrap().to_string()),
+            total_supply: if let Some(total_supply) = total_supply_res {
+                Some(total_supply.to_string())
+            } else {
+                Some(String::from("0"))
+            },
             base_uri: None,
             contract_meta_data_uri: None,
         });
