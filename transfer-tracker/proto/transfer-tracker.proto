@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package token_tracker;
+package transfer_tracker;
 
 enum TokenStandard{
     UNKNOWN = 0;
