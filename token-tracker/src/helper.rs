@@ -2,7 +2,7 @@ use crate::{
     abi,
     pb::token_tracker::{self},
 };
-use substreams::Hex;
+use substreams::{log, Hex};
 
 // pub const ERC721_IFACE_ID: [u8; 4] = <[u8; 4]>::from_hex("01ffc9a7").unwrap();
 pub const ERC721_IFACE_ID: [u8; 4] = [0x01, 0xff, 0xc9, 0xa7];
@@ -37,8 +37,8 @@ pub fn get_token(
     let decimals_res = erc20_functions::Decimals {}.call(token_address_bytes.clone());
     let total_supply_res = erc20_functions::TotalSupply {}.call(token_address_bytes.clone());
 
-    if decimals_res.is_some() {
-        let decimals = decimals_res.unwrap();
+    if let (Some(name), Some(symbol), Some(decimals), Some(total_supply)) =
+        (name_res, symbol_res, decimals_res, total_supply_res) {
         return Some(token_tracker::Token {
             chain_id: 1.to_string(),
             token_address: token_address.clone(),
@@ -47,10 +47,10 @@ pub fn get_token(
             deployment_block: block_number,
             deployment_timestamp: block_timestamp,
             deployer: from,
-            name: name_res,
-            symbol: symbol_res,
+            name: Some(name),
+            symbol: Some(symbol),
             decimals: Some(decimals.as_u64()),
-            total_supply: Some(total_supply_res.unwrap().to_string()),
+            total_supply: Some(total_supply.to_string()),
             base_uri: None,
             contract_meta_data_uri: None,
         });
