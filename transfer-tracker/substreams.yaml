@@ -1,6 +1,6 @@
 specVersion: v0.1.0
 package:
-  name: all_token_tracker
+  name: transfer_tracker
   version: v0.1.0
 
 imports:
@@ -8,14 +8,14 @@ imports:
 
 protobuf:
   files:
-    - token-tracker.proto
+    - transfer-tracker.proto
   importPaths:
     - ./proto
 
 binaries:
   default:
     type: wasm/rust-v1
-    file: target/wasm32-unknown-unknown/release/all_token_tracker_substream.wasm
+    file: target/wasm32-unknown-unknown/release/transfer_tracker_substream.wasm
 
 modules:
   - name: map_transfers
@@ -24,25 +24,25 @@ modules:
     inputs:
       - source: sf.ethereum.type.v2.Block
     output:
-      type: proto:token_tracker.Transfers
+      type: proto:transfer_tracker.Transfers
 
   - name: store_transfers
     kind: store
     updatePolicy: set
-    valueType: proto:token_tracker.Transfer
+    valueType: proto:transfer_tracker.Transfer
     inputs:
       - map: map_transfers
 
   - name: store_erc1155_batch
     kind: store
     updatePolicy: set
-    valueType: proto:token_tracker.ERC1155TransferBatch
+    valueType: proto:transfer_tracker.ERC1155TransferBatch
     inputs:
       - map: map_transfers
 
   - name: store_erc1155_single
     kind: store
     updatePolicy: set
-    valueType: proto:token_tracker.ERC1155TransferSingle
+    valueType: proto:transfer_tracker.ERC1155TransferSingle
     inputs:
       - map: map_transfers

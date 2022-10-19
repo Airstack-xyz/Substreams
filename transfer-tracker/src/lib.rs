@@ -2,7 +2,7 @@ mod abis;
 mod pb;
 mod helpers;
 
-use pb::token_tracker::{Transfers, Transfer, Erc1155TransferBatch, Erc1155TransferSingle};
+use pb::transfer_tracker::{Transfers, Transfer, Erc1155TransferBatch, Erc1155TransferSingle};
 use substreams::store;
 use substreams::{log, Hex, proto};
 use substreams::errors::Error;

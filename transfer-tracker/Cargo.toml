@@ -1,5 +1,5 @@
 [package]
-name = "all-token-tracker-substream"
+name = "transfer-tracker-substream"
 version = "0.1.0"
 edition = "2021"
 
