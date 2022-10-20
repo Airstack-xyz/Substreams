@@ -52,7 +52,7 @@ pub fn get_token(
             decimals: Some(decimals.as_u64()),
             total_supply: Some(total_supply.to_string()),
             base_uri: None,
-            contract_meta_data_uri: None,
+            contract_metadata_uri: None,
         });
     }
     // eip1155
@@ -82,7 +82,7 @@ pub fn get_token(
             decimals: None,
             total_supply: None,
             base_uri: None,
-            contract_meta_data_uri: None,
+            contract_metadata_uri: None,
         });
     }
 
@@ -127,7 +127,7 @@ pub fn get_token(
                 Some(String::from("0"))
             },
             base_uri: None,
-            contract_meta_data_uri: None,
+            contract_metadata_uri: None,
         });
     }
 

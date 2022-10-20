@@ -10,23 +10,22 @@ enum TokenStandard{
 }
 
 message Tokens {
-    repeated Token tokens = 1;
-  }
+  repeated Token tokens = 1;
+}
 
   
-  message Token {
-    string chainId = 1;
-    string tokenAddress = 2;
-    TokenStandard tokenType = 3;
-    string deploymentTransactionHash = 4;
-    string deploymentBlock = 5;
-    string deploymentTimestamp = 6;
-    string deployer = 7;
-    optional string name = 8;
-    optional string symbol = 9;
-    optional uint64 decimals = 10; 
-    optional string totalSupply = 11;
-    optional string baseURI = 12;
-    optional string contractMetaDataURI = 13;
-  
-  }
+message Token {
+  string chain_id = 1;
+  string token_address = 2;
+  TokenStandard token_type = 3;
+  string deployment_transaction_hash = 4;
+  string deployment_block = 5;
+  string deployment_timestamp = 6;
+  string deployer = 7;
+  optional string name = 8;
+  optional string symbol = 9;
+  optional uint64 decimals = 10; 
+  optional string total_supply = 11;
+  optional string base_uri = 12;
+  optional string contract_metadata_uri = 13;
+}
