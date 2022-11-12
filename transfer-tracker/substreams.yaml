@@ -25,24 +25,3 @@ modules:
       - source: sf.ethereum.type.v2.Block
     output:
       type: proto:transfer_tracker.Transfers
-
-  - name: store_transfers
-    kind: store
-    updatePolicy: set
-    valueType: proto:transfer_tracker.Transfer
-    inputs:
-      - map: map_transfers
-
-  - name: store_erc1155_batch
-    kind: store
-    updatePolicy: set
-    valueType: proto:transfer_tracker.ERC1155TransferBatch
-    inputs:
-      - map: map_transfers
-
-  - name: store_erc1155_single
-    kind: store
-    updatePolicy: set
-    valueType: proto:transfer_tracker.ERC1155TransferSingle
-    inputs:
-      - map: map_transfers
