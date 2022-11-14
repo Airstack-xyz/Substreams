@@ -20,8 +20,8 @@ pub const ERC1155_METADATA_URI_IFACE_ID: [u8; 4] = [0x0e, 0x89, 0x34, 0x1c];
 
 pub fn get_token(
     token_address: String,
-    block_number: String,
-    block_timestamp: String,
+    block_number: u64,
+    block_timestamp: u64,
     tx_hash: String,
     from: String,
 ) -> Option<token_tracker::Token> {

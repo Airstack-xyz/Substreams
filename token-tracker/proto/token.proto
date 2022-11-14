@@ -19,8 +19,8 @@ message Token {
   string token_address = 2;
   TokenStandard token_type = 3;
   string deployment_transaction_hash = 4;
-  string deployment_block = 5;
-  string deployment_timestamp = 6;
+  uint64 deployment_block = 5;
+  uint64 deployment_timestamp = 6;
   string deployer = 7;
   optional string name = 8;
   optional string symbol = 9;

@@ -12,8 +12,8 @@ fn block_to_tokens(blk: eth::Block) -> Result<token_tracker::Tokens, substreams:
     let mut tokens = token_tracker::Tokens { tokens: vec![] };
 
     
-    let block_number = blk.clone().number.to_string();
-    let block_timestamp = blk.clone().header.unwrap().timestamp.unwrap().seconds.to_string();
+    let block_number = blk.clone().number;
+    let block_timestamp = blk.clone().header.unwrap().timestamp.unwrap().seconds as u64;
     for call_view in blk.calls() {
         let tx_hash = Hex(call_view.transaction.clone().hash).to_string();
         let from = Hex(call_view.transaction.from.clone()).to_string();
