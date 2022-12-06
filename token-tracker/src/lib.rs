@@ -11,7 +11,7 @@ use substreams_ethereum::pb::eth::v2 as eth;
 fn block_to_tokens(blk: eth::Block) -> Result<token_tracker::Tokens, substreams::errors::Error> {
     let mut tokens = token_tracker::Tokens { tokens: vec![] };
 
-    let block_number = blk.number.to_string();
+    let block_number = blk.number;
     let block_timestamp = blk
         .header
         .as_ref()
@@ -20,8 +20,7 @@ fn block_to_tokens(blk: eth::Block) -> Result<token_tracker::Tokens, substreams:
         .as_ref()
         .unwrap()
         .seconds
-        .to_string();
-
+        as u64;
     for call_view in blk.calls() {
         let tx_hash = Hex(&call_view.transaction.hash).to_string();
         let from = Hex(&call_view.transaction.from).to_string();

@@ -33,7 +33,7 @@ cargo build --target wasm32-unknown-unknown --release
 4. Run the substream. Make sure to change module name & block number based on substream.
 
 ```
-substreams run -e api-dev.streamingfast.io:443 \
+substreams run -e mainnet.eth.streamingfast.io:443 \
    substreams.yaml \
    map_transfers,store_transfers \
    --start-block 0 \
