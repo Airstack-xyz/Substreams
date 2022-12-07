@@ -35,8 +35,8 @@ cargo build --target wasm32-unknown-unknown --release
 ```
 substreams run -e mainnet.eth.streamingfast.io:443 \
    substreams.yaml \
-   map_transfers,store_transfers \
-   --start-block 0 \
+   map_transfers \
+   --start-block 10000000 \
    --stop-block 20000000
 ```
 
