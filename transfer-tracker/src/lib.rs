@@ -4,8 +4,7 @@ mod pb;
 
 use pb::transfer_tracker::{Erc1155TransferBatch, Erc1155TransferSingle, Transfer, Transfers};
 use substreams::errors::Error;
-use substreams::store;
-use substreams::{log, proto, Hex};
+use substreams::{log, Hex};
 use substreams_ethereum::{pb::eth::v2 as eth, Event as EventTrait};
 
 #[substreams::handlers::map]
@@ -14,8 +13,8 @@ fn map_transfers(blk: eth::Block) -> Result<Transfers, Error> {
     let mut erc1155_transfer_batchs = vec![];
     let mut erc1155_transfer_singles = vec![];
     for log in blk.logs() {
-        let txHash = Hex(log.receipt.transaction.hash.clone()).to_string();
-        log::info!("Tx Hash {}", txHash);
+        let tx_hash = Hex(log.receipt.transaction.hash.clone()).to_string();
+        log::info!("Tx Hash {}", tx_hash);
 
         // ERC20 Transfer
         if let Some(event) = abis::erc20::events::Transfer::match_and_decode(log) {
@@ -28,7 +27,7 @@ fn map_transfers(blk: eth::Block) -> Result<Transfers, Error> {
                 chain_id: 1.to_string(),
                 log_index: log.block_index(),
                 source: 1,
-                transaction_hash: helpers::utils::format_address(txHash.clone()),
+                transaction_hash: helpers::utils::format_address(tx_hash.clone()),
                 operator: helpers::utils::format_address(
                     Hex(log.receipt.transaction.from.clone()).to_string(),
                 ),
@@ -61,7 +60,7 @@ fn map_transfers(blk: eth::Block) -> Result<Transfers, Error> {
                 chain_id: 1.to_string(),
                 log_index: log.block_index(),
                 source: 1,
-                transaction_hash: txHash.clone(),
+                transaction_hash: tx_hash.clone(),
                 token_id: event.token_id.to_string(),
                 operator: helpers::utils::format_address(
                     Hex(log.receipt.transaction.from.clone()).to_string(),
@@ -89,7 +88,7 @@ fn map_transfers(blk: eth::Block) -> Result<Transfers, Error> {
         if let Some(event) = abis::erc1155::events::TransferBatch::match_and_decode(log) {
             let erc1155_transfer_batch: Erc1155TransferBatch = Erc1155TransferBatch {
                 amounts: event.values.iter().map(|c| c.clone().to_string()).collect(),
-                transaction_hash: txHash.clone(),
+                transaction_hash: tx_hash.clone(),
                 log_index: log.block_index(),
                 source: 1,
                 chain_id: 1.to_string(),
@@ -125,7 +124,7 @@ fn map_transfers(blk: eth::Block) -> Result<Transfers, Error> {
         if let Some(event) = abis::erc1155::events::TransferSingle::match_and_decode(log) {
             let erc1155_transfer_single: Erc1155TransferSingle = Erc1155TransferSingle {
                 amount: event.value.to_string(),
-                transaction_hash: txHash.clone(),
+                transaction_hash: tx_hash.clone(),
                 log_index: log.block_index(),
                 source: 1,
                 chain_id: 1.to_string(),
