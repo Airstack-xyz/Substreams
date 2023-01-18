@@ -32,7 +32,7 @@ fn block_to_tokens(blk: eth::Block) -> Result<token_tracker::Tokens, substreams:
             log::info!("address {}", address);
 
             let token =
-                helper::get_token(&address, &block_number, &block_timestamp, &tx_hash, &from);
+                helper::get_token(&address, block_number, block_timestamp, &tx_hash, &from);
             if token.is_some() {
                 tokens.tokens.push(token.unwrap());
             }
