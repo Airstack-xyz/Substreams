@@ -28,7 +28,7 @@ fn map_transfers(blk: eth::Block) -> Result<Transfers, Error> {
                 chain_id: 1.to_string(),
                 log_index: log.block_index(),
                 source: 1,
-                transaction_hash: helpers::utils::format_address(Hex(txHash.clone()).to_string()),
+                transaction_hash: helpers::utils::format_address(txHash.clone()),
                 operator: helpers::utils::format_address(
                     Hex(log.receipt.transaction.from.clone()).to_string(),
                 ),
