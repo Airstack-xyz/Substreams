@@ -1,1 +1,0 @@
-pub const BASE_TOKEN_ADDRESS: &str = "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
