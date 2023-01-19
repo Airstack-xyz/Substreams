@@ -80,12 +80,12 @@ pub fn get_token(
     {
         return Some(token_tracker::Token {
             chain_id: 1.to_string(),
-            token_address: token_address.clone(),
+            token_address: format_address(Hex(token_address.clone()).to_string()),
             token_type: 3,
-            deployment_transaction_hash: tx_hash.clone(),
+            deployment_transaction_hash: format_address(Hex(tx_hash.clone()).to_string()),
             deployment_block: block_number.clone(),
             deployment_timestamp: block_timestamp.clone(),
-            deployer: from.clone(),
+            deployer: format_address(Hex(from.clone()).to_string()),
             name: None,
             symbol: None,
             decimals: None,
@@ -121,12 +121,12 @@ pub fn get_token(
 
         return Some(token_tracker::Token {
             chain_id: 1.to_string(),
-            token_address: token_address.clone(),
+            token_address: format_address(Hex(token_address.clone()).to_string()),
             token_type: 2,
-            deployment_transaction_hash: tx_hash.clone(),
+            deployment_transaction_hash: format_address(Hex(tx_hash.clone()).to_string()),
             deployment_block: block_number.clone(),
             deployment_timestamp: block_timestamp.clone(),
-            deployer: from.clone(),
+            deployer: format_address(Hex(from.clone()).to_string()),
             name: name_res,
             symbol: symbol_res,
             decimals: None,
