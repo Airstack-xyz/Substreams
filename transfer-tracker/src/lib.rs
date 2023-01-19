@@ -21,18 +21,18 @@ fn map_transfers(blk: eth::Block) -> Result<Transfers, Error> {
             let erc20_transfer: Transfer = Transfer {
                 amount: event.value.to_string(),
                 token_id: event.value.to_string(),
-                token_address: helpers::utils::format_address(
+                token_address: helpers::utils::format_with_0x(
                     Hex(log.clone().address()).to_string(),
                 ),
                 chain_id: 1.to_string(),
                 log_index: log.block_index(),
                 source: 1,
-                transaction_hash: helpers::utils::format_address(tx_hash.clone()),
-                operator: helpers::utils::format_address(
+                transaction_hash: helpers::utils::format_with_0x(tx_hash.clone()),
+                operator: helpers::utils::format_with_0x(
                     Hex(log.receipt.transaction.from.clone()).to_string(),
                 ),
-                from: helpers::utils::format_address(Hex(event.from).to_string()),
-                to: helpers::utils::format_address(Hex(event.to).to_string()),
+                from: helpers::utils::format_with_0x(Hex(event.from).to_string()),
+                to: helpers::utils::format_with_0x(Hex(event.to).to_string()),
                 token_type: 0,
                 block_number: blk.number,
                 block_timestamp: blk
@@ -54,19 +54,19 @@ fn map_transfers(blk: eth::Block) -> Result<Transfers, Error> {
         if let Some(event) = abis::erc721::events::Transfer::match_and_decode(log) {
             let erc721_transfer: Transfer = Transfer {
                 amount: event.token_id.to_string(),
-                token_address: helpers::utils::format_address(
+                token_address: helpers::utils::format_with_0x(
                     Hex(log.clone().address()).to_string(),
                 ),
                 chain_id: 1.to_string(),
                 log_index: log.block_index(),
                 source: 1,
-                transaction_hash: helpers::utils::format_address(tx_hash.clone()),
+                transaction_hash: helpers::utils::format_with_0x(tx_hash.clone()),
                 token_id: event.token_id.to_string(),
-                operator: helpers::utils::format_address(
+                operator: helpers::utils::format_with_0x(
                     Hex(log.receipt.transaction.from.clone()).to_string(),
                 ),
-                from: helpers::utils::format_address(Hex(event.from).to_string()),
-                to: helpers::utils::format_address(Hex(event.to).to_string()),
+                from: helpers::utils::format_with_0x(Hex(event.from).to_string()),
+                to: helpers::utils::format_with_0x(Hex(event.to).to_string()),
                 token_type: 0, // token type will be detected outside this substream by token tracker substream
                 block_number: blk.number,
                 block_timestamp: blk
@@ -88,16 +88,16 @@ fn map_transfers(blk: eth::Block) -> Result<Transfers, Error> {
         if let Some(event) = abis::erc1155::events::TransferBatch::match_and_decode(log) {
             let erc1155_transfer_batch: Erc1155TransferBatch = Erc1155TransferBatch {
                 amounts: event.values.iter().map(|c| c.clone().to_string()).collect(),
-                transaction_hash: helpers::utils::format_address(tx_hash.clone()),
+                transaction_hash: helpers::utils::format_with_0x(tx_hash.clone()),
                 log_index: log.block_index(),
                 source: 1,
                 chain_id: 1.to_string(),
-                token_address: helpers::utils::format_address(
+                token_address: helpers::utils::format_with_0x(
                     Hex(log.log.clone().address).to_string(),
                 ),
-                operator: helpers::utils::format_address(Hex(event.operator).to_string()),
-                from: helpers::utils::format_address(Hex(event.from).to_string()),
-                to: helpers::utils::format_address(Hex(event.to).to_string()),
+                operator: helpers::utils::format_with_0x(Hex(event.operator).to_string()),
+                from: helpers::utils::format_with_0x(Hex(event.from).to_string()),
+                to: helpers::utils::format_with_0x(Hex(event.to).to_string()),
                 token_type: 3,
                 block_number: blk.number,
                 block_timestamp: blk
@@ -124,16 +124,16 @@ fn map_transfers(blk: eth::Block) -> Result<Transfers, Error> {
         if let Some(event) = abis::erc1155::events::TransferSingle::match_and_decode(log) {
             let erc1155_transfer_single: Erc1155TransferSingle = Erc1155TransferSingle {
                 amount: event.value.to_string(),
-                transaction_hash: helpers::utils::format_address(tx_hash.clone()),
+                transaction_hash: helpers::utils::format_with_0x(tx_hash.clone()),
                 log_index: log.block_index(),
                 source: 1,
                 chain_id: 1.to_string(),
-                token_address: helpers::utils::format_address(
+                token_address: helpers::utils::format_with_0x(
                     Hex(log.log.clone().address).to_string(),
                 ),
-                operator: helpers::utils::format_address(Hex(event.operator).to_string()),
-                from: helpers::utils::format_address(Hex(event.from).to_string()),
-                to: helpers::utils::format_address(Hex(event.to).to_string()),
+                operator: helpers::utils::format_with_0x(Hex(event.operator).to_string()),
+                from: helpers::utils::format_with_0x(Hex(event.from).to_string()),
+                to: helpers::utils::format_with_0x(Hex(event.to).to_string()),
                 token_type: 3,
                 block_number: blk.number,
                 block_timestamp: blk

@@ -1,3 +1,3 @@
-pub fn format_address(address: String) -> String {
+pub fn format_with_0x(address: String) -> String {
     format!("0x{}", address)
 }

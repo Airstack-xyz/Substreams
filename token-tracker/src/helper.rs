@@ -19,7 +19,7 @@ pub const ERC1155_METADATA_URI_IFACE_ID: [u8; 4] = hex!("0e89341c");
 /**
  * @dev formatting address and txn hash with 0x prefix
  */
-pub fn format_address(address: String) -> String {
+pub fn format_with_0x(address: String) -> String {
     format!("0x{}", address)
 }
 
@@ -50,12 +50,12 @@ pub fn get_token(
     {
         return Some(token_tracker::Token {
             chain_id: 1.to_string(),
-            token_address: format_address(Hex(token_address.clone()).to_string()),
+            token_address: format_with_0x(Hex(token_address.clone()).to_string()),
             token_type: 1,
-            deployment_transaction_hash: format_address(Hex(tx_hash.clone()).to_string()),
+            deployment_transaction_hash: format_with_0x(Hex(tx_hash.clone()).to_string()),
             deployment_block: block_number.clone(),
             deployment_timestamp: block_timestamp.clone(),
-            deployer: format_address(Hex(from.clone()).to_string()),
+            deployer: format_with_0x(Hex(from.clone()).to_string()),
             name: Some(name),
             symbol: Some(symbol),
             decimals: Some(decimals.to_u64()),
@@ -80,12 +80,12 @@ pub fn get_token(
     {
         return Some(token_tracker::Token {
             chain_id: 1.to_string(),
-            token_address: format_address(Hex(token_address.clone()).to_string()),
+            token_address: format_with_0x(Hex(token_address.clone()).to_string()),
             token_type: 3,
-            deployment_transaction_hash: format_address(Hex(tx_hash.clone()).to_string()),
+            deployment_transaction_hash: format_with_0x(Hex(tx_hash.clone()).to_string()),
             deployment_block: block_number.clone(),
             deployment_timestamp: block_timestamp.clone(),
-            deployer: format_address(Hex(from.clone()).to_string()),
+            deployer: format_with_0x(Hex(from.clone()).to_string()),
             name: None,
             symbol: None,
             decimals: None,
@@ -121,12 +121,12 @@ pub fn get_token(
 
         return Some(token_tracker::Token {
             chain_id: 1.to_string(),
-            token_address: format_address(Hex(token_address.clone()).to_string()),
+            token_address: format_with_0x(Hex(token_address.clone()).to_string()),
             token_type: 2,
-            deployment_transaction_hash: format_address(Hex(tx_hash.clone()).to_string()),
+            deployment_transaction_hash: format_with_0x(Hex(tx_hash.clone()).to_string()),
             deployment_block: block_number.clone(),
             deployment_timestamp: block_timestamp.clone(),
-            deployer: format_address(Hex(from.clone()).to_string()),
+            deployer: format_with_0x(Hex(from.clone()).to_string()),
             name: name_res,
             symbol: symbol_res,
             decimals: None,
