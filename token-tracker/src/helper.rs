@@ -49,7 +49,7 @@ pub fn get_token(
         (name_res, symbol_res, decimals_res, total_supply_res)
     {
         return Some(token_tracker::Token {
-            chain_id: 1.to_string(),
+            chain_id: 137.to_string(),
             token_address: format_with_0x(token_address.clone().to_string()),
             token_type: 1,
             deployment_transaction_hash: format_with_0x(tx_hash.clone().to_string()),
@@ -79,7 +79,7 @@ pub fn get_token(
     // || eip155_metadata_iface_resp == Some(true)
     {
         return Some(token_tracker::Token {
-            chain_id: 1.to_string(),
+            chain_id: 137.to_string(),
             token_address: format_with_0x(token_address.clone().to_string()),
             token_type: 3,
             deployment_transaction_hash: format_with_0x(tx_hash.clone().to_string()),
@@ -120,7 +120,7 @@ pub fn get_token(
         let total_supply_res = erc721_functions::TotalSupply {}.call(token_address_bytes.clone());
 
         return Some(token_tracker::Token {
-            chain_id: 1.to_string(),
+            chain_id: 137.to_string(),
             token_address: format_with_0x(token_address.clone().to_string()),
             token_type: 2,
             deployment_transaction_hash: format_with_0x(tx_hash.clone().to_string()),
