@@ -1,1 +1,1 @@
-pub mod ERC721_non_standard;
+pub mod erc721_non_standard;
