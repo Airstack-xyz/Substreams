@@ -1,0 +1,27 @@
+specVersion: v0.1.0
+package:
+  name: transfer_tracker
+  version: v0.1.0
+
+imports:
+  eth: https://github.com/streamingfast/sf-ethereum/releases/download/v0.10.2/ethereum-v0.10.4.spkg
+
+protobuf:
+  files:
+    - transfer-tracker.proto
+  importPaths:
+    - ./proto
+
+binaries:
+  default:
+    type: wasm/rust-v1
+    file: target/wasm32-unknown-unknown/release/transfer_tracker_substream.wasm
+
+modules:
+  - name: map_transfers
+    kind: map
+    initialBlock: 0
+    inputs:
+      - source: sf.ethereum.type.v2.Block
+    output:
+      type: proto:transfer_tracker.Transfers
