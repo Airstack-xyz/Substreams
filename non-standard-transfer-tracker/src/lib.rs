@@ -15,7 +15,8 @@ fn map_transfers(blk: eth::Block) -> Result<Transfers, Error> {
         // log::info!("Tx Hash {}", tx_hash);
 
         // ERC721 Transfer
-        if let Some(event) = abis::erc721_non_standard::events::Transfer::match_and_decode(log) {
+        if let Some(event) = abis::non_standard_transaction::events::Transfer::match_and_decode(log)
+        {
             log::info!(
                 "ERC721 non std {}",
                 Hex(log.receipt.transaction.hash.clone()).to_string()

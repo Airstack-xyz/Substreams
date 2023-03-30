@@ -1,1 +1,1 @@
-pub mod erc721_non_standard;
+pub mod non_standard_transaction;
