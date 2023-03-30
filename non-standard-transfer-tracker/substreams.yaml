@@ -15,7 +15,7 @@ protobuf:
 binaries:
     default:
         type: wasm/rust-v1
-        file: target/wasm32-unknown-unknown/release/transfer_tracker_substream.wasm
+        file: target/wasm32-unknown-unknown/release/non_standard_transfer_tracker_substream.wasm
 
 modules:
     - name: map_transfers

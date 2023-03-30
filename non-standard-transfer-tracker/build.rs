@@ -2,8 +2,11 @@ use anyhow::{Ok, Result};
 use substreams_ethereum::Abigen;
 
 fn main() -> Result<(), anyhow::Error> {
-    Abigen::new("erc721_non_standard", "abis/erc721_non_std.json")?
-        .generate()?
-        .write_to_file("src/abis/erc721_non_standard.rs")?;
+    Abigen::new(
+        "non_standard_transaction",
+        "abis/non_standard_transaction.json",
+    )?
+    .generate()?
+    .write_to_file("src/abis/non_standard_transaction.rs")?;
     Ok(())
 }
