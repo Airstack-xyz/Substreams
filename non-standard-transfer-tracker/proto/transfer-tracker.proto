@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package transfer_tracker;
+
+enum TokenStandard{
+    UNKNOWN = 0;
+    ERC20 = 1;
+    ERC721 = 2;
+    ERC1155 = 3;
+    BASE_TOKEN = 4;
+}
+
+enum Source {
+    CALL = 0;
+    LOG = 1;
+}
+
+message Transfers{
+    repeated Transfer transfers = 1;
+}
+
+message Transfer{
+    string transaction_hash = 1;
+    uint32 log_index = 2;
+    uint32 call_index =3;
+    uint32 call_depth =4;
+    Source source =5;
+    string chain_id = 6;
+    string token_address = 7;
+    string token_id = 8;
+    string operator = 9;
+    string from = 10;
+    string to = 11;
+    string amount = 12;
+    TokenStandard token_type = 13;
+    uint64 block_number = 14;
+    uint64 block_timestamp = 15;
+}
