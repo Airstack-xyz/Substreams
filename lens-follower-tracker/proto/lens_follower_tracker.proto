@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package lens_follower_tracker;
+
+message FollowNFTDeployedMessage {
+    repeated FollowNftDeployed followNftDeployedEvents = 1;
+}
+
+message FollowNftDeployed{
+    uint64 profileId = 1;
+    string followNFT = 2;
+    uint64 timestamp =3;
+}
