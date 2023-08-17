@@ -1,6 +1,6 @@
 specVersion: v0.1.0
 package:
-  name: lens_follower_tracker
+  name: lens_event_tracker
   version: v0.1.0
 
 imports:
@@ -8,20 +8,24 @@ imports:
 
 protobuf:
   files:
-    - lens_follower_tracker.proto
+    - lens_events.proto
   importPaths:
     - ./proto
 
 binaries:
   default:
     type: wasm/rust-v1
-    file: target/wasm32-unknown-unknown/release/lens_follower_tracker_substream.wasm
+    file: target/wasm32-unknown-unknown/release/lens_event_tracker.wasm
+
+params:
+  map_lens_events: "0xdb46d1dc155634fbc732f92e853b10b288ad5a1d"
 
 modules:
-  - name: map_transfers
+  - name: map_lens_events
     kind: map
-    initialBlock: 0
+    initialBlock: 28384641
     inputs:
+      - params: string
       - source: sf.ethereum.type.v2.Block
     output:
-      type: proto:lens_follower_tracker.Transfers
+      type: proto:lens_events.LensEvents

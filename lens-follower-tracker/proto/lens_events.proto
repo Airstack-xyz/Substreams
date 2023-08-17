@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package lens_events;
+
+
+message LensEvents {
+  repeated FollowNFTDeployed follow_nft_deployed_events = 1;
+  repeated FollowNFTTransferred follow_nft_transferred_events = 2; 
+}
+
+message FollowNFTDeployed {
+    string followProfileId = 1;
+    string followTokenAddress = 2;
+}
+
+message FollowNFTTransferred {
+  string followProfileId = 1;
+  string followTokenId = 2;
+  string followerAddress = 3;
+  string followType = 4;
+}
