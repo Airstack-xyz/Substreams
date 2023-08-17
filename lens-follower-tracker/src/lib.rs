@@ -4,7 +4,7 @@ mod helpers;
 
 use pb::lens_events::{FollowNftDeployed, LensEvents, FollowNftTransferred};
 use substreams::errors::Error;
-use substreams::{log, Hex};
+use substreams::{Hex};
 use substreams_ethereum::{pb::eth::v2 as eth, Event as EventTrait};
 use helpers::utils::format_with_0x;
 
