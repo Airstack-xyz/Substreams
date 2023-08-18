@@ -1,9 +1,9 @@
 syntax = "proto3";
 
-package lens_events;
+package lens.events;
 
 
-message LensEvents {
+message FollowEvents {
   repeated FollowNFTDeployed follow_nft_deployed_events = 1;
   repeated FollowNFTTransferred follow_nft_transferred_events = 2; 
 }

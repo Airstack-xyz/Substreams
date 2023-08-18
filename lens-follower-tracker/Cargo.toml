@@ -1,7 +1,7 @@
 [package]
-name = "lens_event_tracker"
+name = "lens_follower_tracker"
 version = "0.1.0"
-description = "Substream template demo project"
+description = "This project is to track the follower of lens"
 edition = "2021"
 repository = "https://github.com/streamingfast/substreams-template"
 license = "Apache 2.0"

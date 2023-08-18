@@ -1,7 +1,7 @@
 // @generated
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct LensEvents {
+pub struct FollowEvents {
     #[prost(message, repeated, tag="1")]
     pub follow_nft_deployed_events: ::prost::alloc::vec::Vec<FollowNftDeployed>,
     #[prost(message, repeated, tag="2")]

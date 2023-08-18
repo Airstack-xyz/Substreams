@@ -2,7 +2,7 @@ mod abis;
 mod pb;
 mod helpers;
 
-use pb::lens_events::{FollowNftDeployed, LensEvents, FollowNftTransferred};
+use pb::lens::events::{FollowNftDeployed, FollowEvents, FollowNftTransferred};
 use substreams::errors::Error;
 use substreams::{Hex};
 use substreams_ethereum::{pb::eth::v2 as eth, Event as EventTrait};
@@ -20,7 +20,7 @@ substreams_ethereum::init!();
 
 /// Extracts lens events from the contract
 #[substreams::handlers::map]
-fn map_lens_events(contract_address: String, blk: eth::Block) -> Result<LensEvents, Error> {
+fn map_lens_follower_events(contract_address: String, blk: eth::Block) -> Result<FollowEvents, Error> {
     let mut follow_nft_deployed_events = vec![];
     let mut follow_nft_transferred_events: Vec<FollowNftTransferred> = vec![];
 
@@ -56,7 +56,7 @@ fn map_lens_events(contract_address: String, blk: eth::Block) -> Result<LensEven
             }
 
             // scenario 2: follow for event [from:0x..782 [proxy] to: follower address]
-            if from == LENS_PROXY_ACTION_ADDRESS  {
+            if from == LENS_PROXY_ACTION_ADDRESS && to != ZERO_ADDRESS {
                 let follow_nft_transferred_event : FollowNftTransferred = FollowNftTransferred {
                     follow_profile_id: event.profile_id.to_string(),
                     follow_token_id: event.follow_nft_id.to_string(),
@@ -67,7 +67,7 @@ fn map_lens_events(contract_address: String, blk: eth::Block) -> Result<LensEven
             }
 
             // scenario 3: burn event [from:follower to: 0x]
-            if to == ZERO_ADDRESS {
+            if from != LENS_PROXY_ACTION_ADDRESS && to == ZERO_ADDRESS {
                 let follow_nft_transferred_event : FollowNftTransferred = FollowNftTransferred {
                     follow_profile_id: event.profile_id.to_string(),
                     follow_token_id: event.follow_nft_id.to_string(),
@@ -76,11 +76,22 @@ fn map_lens_events(contract_address: String, blk: eth::Block) -> Result<LensEven
                 };
                 follow_nft_transferred_events.push(follow_nft_transferred_event) 
             }
-            // scenario 4: transfer between addresses  -> should exclude this event
+
+            // scenario 4: transfer between addresses  -> should unfollow the from address
+            if from != ZERO_ADDRESS && from != LENS_PROXY_ACTION_ADDRESS 
+                && to != ZERO_ADDRESS && to != LENS_PROXY_ACTION_ADDRESS {
+                    let follow_nft_transferred_event : FollowNftTransferred = FollowNftTransferred {
+                        follow_profile_id: event.profile_id.to_string(),
+                        follow_token_id: event.follow_nft_id.to_string(),
+                        follower_address: from.clone(),
+                        follow_type: UNFOLLOW.to_string(),
+                    };
+                    follow_nft_transferred_events.push(follow_nft_transferred_event) 
+            }
         }
     }
 
-    Ok(LensEvents {
+    Ok(FollowEvents {
         follow_nft_deployed_events,
         follow_nft_transferred_events
     })

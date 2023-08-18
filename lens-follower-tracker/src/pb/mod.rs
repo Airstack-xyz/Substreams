@@ -1,6 +1,8 @@
 // @generated
-// @@protoc_insertion_point(attribute:lens_events)
-pub mod lens_events {
-    include!("lens_events.rs");
-    // @@protoc_insertion_point(lens_events)
+pub mod lens {
+    // @@protoc_insertion_point(attribute:lens.events)
+    pub mod events {
+        include!("lens.events.rs");
+        // @@protoc_insertion_point(lens.events)
+    }
 }
