@@ -2,13 +2,13 @@ mod abis;
 mod helpers;
 mod pb;
 
-use pb::transfer_tracker::{Transfer, Transfers};
+use pb::non_standard_transfer_tracker::{Transfer, Transfers};
 use substreams::errors::Error;
 use substreams::{log, Hex};
 use substreams_ethereum::{pb::eth::v2 as eth, Event as EventTrait};
 
 #[substreams::handlers::map]
-fn map_transfers(blk: eth::Block) -> Result<Transfers, Error> {
+fn map_non_standard_transfers(blk: eth::Block) -> Result<Transfers, Error> {
     let mut transfers = vec![];
     for log in blk.logs() {
         let tx_hash = Hex(log.receipt.transaction.hash.clone()).to_string();
@@ -22,7 +22,7 @@ fn map_transfers(blk: eth::Block) -> Result<Transfers, Error> {
                 Hex(log.receipt.transaction.hash.clone()).to_string()
             );
 
-            let erc721_transfer: Transfer = Transfer {
+            let transfer: Transfer = Transfer {
                 amount: event.token_id.to_string(),
                 token_address: helpers::utils::format_with_0x(
                     Hex(log.clone().address()).to_string(),
@@ -51,7 +51,7 @@ fn map_transfers(blk: eth::Block) -> Result<Transfers, Error> {
                 // log_ordinal: log.ordinal(),
                 ..Default::default()
             };
-            transfers.push(erc721_transfer);
+            transfers.push(transfer);
         }
     }
     Ok(Transfers { transfers })
