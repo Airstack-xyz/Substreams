@@ -8,7 +8,7 @@ imports:
 
 protobuf:
     files:
-        - transfer-tracker.proto
+        - non-standard-transfer-tracker.proto
     importPaths:
         - ./proto
 
@@ -18,10 +18,10 @@ binaries:
         file: target/wasm32-unknown-unknown/release/non_standard_transfer_tracker_substream.wasm
 
 modules:
-    - name: map_transfers
+    - name: map_non_standard_transfers
       kind: map
       initialBlock: 0
       inputs:
           - source: sf.ethereum.type.v2.Block
       output:
-          type: proto:transfer_tracker.Transfers
+          type: proto:non_standard_transfer_tracker.Transfers
