@@ -41,7 +41,7 @@ fn map_lens_follower_events(params: String, blk: eth::Block) -> Result<FollowEve
             let follow_nft_deployed_event : FollowNftDeployed = FollowNftDeployed {
                 follow_profile_id: event.profile_id.to_string(),
                 follow_token_address: format_with_0x(Hex(event.follow_nft).to_string()),
-                activity_timestamp: event.timestamp.to_string(),
+                activity_timestamp: event.timestamp.to_u64(),
                 transaction_hash: helpers::utils::format_with_0x(tx_hash.clone()),
                 log_index: log.block_index().to_string(),
                 block_number:  blk.number,
@@ -57,7 +57,7 @@ fn map_lens_follower_events(params: String, blk: eth::Block) -> Result<FollowEve
             let mut follow_nft_transferred_event : FollowNftTransferred = FollowNftTransferred {
                 follow_profile_id: event.profile_id.to_string(),
                 follow_token_id: event.follow_nft_id.to_string(),
-                activity_timestamp: event.timestamp.to_string(),
+                activity_timestamp: event.timestamp.to_u64(),
                 transaction_hash: helpers::utils::format_with_0x(tx_hash.clone()),
                 log_index: log.block_index().to_string(),
                 block_number:  blk.number,

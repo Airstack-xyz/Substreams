@@ -11,7 +11,7 @@ message FollowEvents {
 message FollowNFTDeployed {
     string followProfileId = 1;
     string followTokenAddress = 2;
-    string activityTimestamp = 3;
+    uint64 activityTimestamp = 3;
     string transactionHash = 4;
     string logIndex = 5;
     uint64 blockNumber = 6;
@@ -22,7 +22,7 @@ message FollowNFTTransferred {
   string followProfileId = 1;
   string followTokenId = 2;
   string followerAddress = 3;
-  string activityTimestamp = 4;
+  uint64 activityTimestamp = 4;
   string followType = 5;
   string transactionHash = 6;
   string logIndex = 7;

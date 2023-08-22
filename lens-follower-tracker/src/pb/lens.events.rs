@@ -14,8 +14,8 @@ pub struct FollowNftDeployed {
     pub follow_profile_id: ::prost::alloc::string::String,
     #[prost(string, tag="2")]
     pub follow_token_address: ::prost::alloc::string::String,
-    #[prost(string, tag="3")]
-    pub activity_timestamp: ::prost::alloc::string::String,
+    #[prost(uint64, tag="3")]
+    pub activity_timestamp: u64,
     #[prost(string, tag="4")]
     pub transaction_hash: ::prost::alloc::string::String,
     #[prost(string, tag="5")]
@@ -32,8 +32,8 @@ pub struct FollowNftTransferred {
     pub follow_token_id: ::prost::alloc::string::String,
     #[prost(string, tag="3")]
     pub follower_address: ::prost::alloc::string::String,
-    #[prost(string, tag="4")]
-    pub activity_timestamp: ::prost::alloc::string::String,
+    #[prost(uint64, tag="4")]
+    pub activity_timestamp: u64,
     #[prost(string, tag="5")]
     pub follow_type: ::prost::alloc::string::String,
     #[prost(string, tag="6")]
