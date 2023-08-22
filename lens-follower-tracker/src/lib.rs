@@ -44,7 +44,7 @@ fn map_lens_follower_events(params: String, blk: eth::Block) -> Result<FollowEve
                 activity_timestamp: event.timestamp.to_string(),
                 transaction_hash: helpers::utils::format_with_0x(tx_hash.clone()),
                 log_index: log.block_index().to_string(),
-                block_number:  blk.number.to_string(),
+                block_number:  blk.number,
             };
             follow_nft_deployed_events.push(follow_nft_deployed_event);
             continue;
@@ -60,7 +60,7 @@ fn map_lens_follower_events(params: String, blk: eth::Block) -> Result<FollowEve
                 activity_timestamp: event.timestamp.to_string(),
                 transaction_hash: helpers::utils::format_with_0x(tx_hash.clone()),
                 log_index: log.block_index().to_string(),
-                block_number:  blk.number.to_string(),
+                block_number:  blk.number,
                 ..Default::default() 
             };
             

@@ -20,8 +20,8 @@ pub struct FollowNftDeployed {
     pub transaction_hash: ::prost::alloc::string::String,
     #[prost(string, tag="5")]
     pub log_index: ::prost::alloc::string::String,
-    #[prost(string, tag="6")]
-    pub block_number: ::prost::alloc::string::String,
+    #[prost(uint64, tag="6")]
+    pub block_number: u64,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -40,7 +40,7 @@ pub struct FollowNftTransferred {
     pub transaction_hash: ::prost::alloc::string::String,
     #[prost(string, tag="7")]
     pub log_index: ::prost::alloc::string::String,
-    #[prost(string, tag="8")]
-    pub block_number: ::prost::alloc::string::String,
+    #[prost(uint64, tag="8")]
+    pub block_number: u64,
 }
 // @@protoc_insertion_point(module)
