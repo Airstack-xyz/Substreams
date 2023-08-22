@@ -17,8 +17,8 @@ binaries:
     type: wasm/rust-v1
     file: target/wasm32-unknown-unknown/release/lens_follower_tracker.wasm
 
-params:
-  map_lens_follower_events: "0xdb46d1dc155634fbc732f92e853b10b288ad5a1d"
+params: 
+  map_lens_follower_events: ""
 
 modules:
   - name: map_lens_follower_events
