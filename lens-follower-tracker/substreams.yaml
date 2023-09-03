@@ -18,7 +18,7 @@ binaries:
     file: target/wasm32-unknown-unknown/release/lens_follower_tracker.wasm
 
 params: 
-  map_lens_follower_events: "lpp_contract_address=0xdb46d1dc155634fbc732f92e853b10b288ad5a1d&proxy_action_contract_address=0xdd3f6c22ecc68007cc9f76da18984995da4b7b82"
+  map_lens_follower_events: "lpp_contract_address=0xdb46d1dc155634fbc732f92e853b10b288ad5a1d"
 
 modules:
   - name: map_lens_follower_events
