@@ -2,8 +2,8 @@ mod abis;
 mod pb;
 mod helpers;
 
-use helpers::constants::{FOLLOW, UNFOLLOW, ZERO_ADDRESS, EMPTY_STRING};
-use pb::lens::events::{FollowNftDeployed, FollowEvents, FollowNftTransferred};
+use helpers::constants::{FOLLOW, UNFOLLOW, ZERO_ADDRESS, EMPTY_STRING, PROXY_ADDRESSESS};
+use pb::lens::events::{FollowNftDeployed, FollowEvents, FollowNftTransferred, ProfileTransferred};
 use substreams::errors::Error;
 use substreams::{Hex};
 use serde::Deserialize;
@@ -31,6 +31,7 @@ fn map_lens_follower_events(params: String, blk: eth::Block) -> Result<FollowEve
     let lpp_contract_address = filters.lpp_contract_address.expect("lpp_contract_address is already verified");
     let mut follow_nft_deployed_events: Vec<FollowNftDeployed> = vec![];
     let mut follow_nft_transferred_events: Vec<FollowNftTransferred> = vec![];
+    let mut profile_transferred_events: Vec<ProfileTransferred> = vec![];
     
     // this maps contains follow_nft_transferred_events for a profileId and followNFTId combination 
     // key : profileId-followNFTId
@@ -54,6 +55,21 @@ fn map_lens_follower_events(params: String, blk: eth::Block) -> Result<FollowEve
         if !lpp_contract_address.contains(&addres) {
             continue;
          }
+
+         // for lens profile transfer scenarios
+          if let Some(event) = abis::erc721_events::events::Transfer::match_and_decode(log) {
+            let profile_transferred_event : ProfileTransferred = ProfileTransferred {
+                from: helpers::utils::format_with_0x(Hex(event.from).to_string()),
+                to: helpers::utils::format_with_0x(Hex(event.to).to_string()),
+                profile_token_id: event.token_id.to_string(),
+                transaction_hash: helpers::utils::format_with_0x(tx_hash.clone()),
+                log_index: log.block_index().to_string(),
+                block_number:  blk.number,
+            };
+            profile_transferred_events.push(profile_transferred_event);
+            continue;
+        } 
+
         // for FollowNftDeployed event
         if let Some(event) = abis::lens_events::events::FollowNftDeployed::match_and_decode(log) {
             let follow_nft_deployed_event : FollowNftDeployed = FollowNftDeployed {
@@ -81,10 +97,19 @@ fn map_lens_follower_events(params: String, blk: eth::Block) -> Result<FollowEve
         // scenario 4: transfer between addresses  -> should unfollow the from address
         // example tx hash: 0xbac904222e15b792acd053f86a8834ebbb4414bedbf4051b0297c378bde73f38
 
+        // scenario 5: follow event from [from:0x0 to: proxy address] in a separate tx hash
+        // and followNFTTransferred event from [from:proxy address to: follower address] in a separate tx hash
+        // example: https://polygonscan.com/nft/0x540ca34e166a134dd649385679f3fe4447e0ae33/42908
+
         if let Some(event) = abis::lens_events::events::FollowNftTransferred::match_and_decode(log) {   
             let from = format_with_0x(Hex(event.from).to_string());
             let to = format_with_0x(Hex(event.to).to_string());
             let key: String = format!("{}{}{}", event.profile_id, "-",event.follow_nft_id);
+
+            // continue if follow nft is minted to one of the proxy addresses
+            if from == ZERO_ADDRESS && PROXY_ADDRESSESS.contains(&to.as_str()) {
+                continue;
+            }
 
             // computing the count of nft transferred events for a profileId and NftId combination
             if let Some(value) = profile_follow_nft_transferred_events_count_map.get_mut(&key) {
@@ -129,9 +154,14 @@ fn map_lens_follower_events(params: String, blk: eth::Block) -> Result<FollowEve
             } else if from != ZERO_ADDRESS  && to == ZERO_ADDRESS {  // scenario: 3
                 follower_address = from;
                 follow_type = UNFOLLOW.to_string();
-            } else if from != ZERO_ADDRESS && to != ZERO_ADDRESS  { // scenario: 4
-                follower_address = from;
-                follow_type = UNFOLLOW.to_string();
+            } else if from != ZERO_ADDRESS && to != ZERO_ADDRESS  {
+                if PROXY_ADDRESSESS.contains(&from.as_str()) {  // scenario: 5
+                    follower_address = to;
+                    follow_type = FOLLOW.to_string();
+                } else {   // scenario: 4
+                    follower_address = from;
+                    follow_type = UNFOLLOW.to_string();
+                }
             }
         } else if *profile_follow_nft_transferred_event_count > 1{
             if from != ZERO_ADDRESS && to != ZERO_ADDRESS { // scenario: 2
@@ -147,7 +177,8 @@ fn map_lens_follower_events(params: String, blk: eth::Block) -> Result<FollowEve
 
     Ok(FollowEvents {
         follow_nft_deployed_events,
-        follow_nft_transferred_events
+        follow_nft_transferred_events,
+        profile_transferred_events
     })
 }
 
