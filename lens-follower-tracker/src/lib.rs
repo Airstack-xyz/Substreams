@@ -58,9 +58,14 @@ fn map_lens_follower_events(params: String, blk: eth::Block) -> Result<FollowEve
 
          // for lens profile transfer scenarios
           if let Some(event) = abis::erc721_events::events::Transfer::match_and_decode(log) {
+            let from = helpers::utils::format_with_0x(Hex(event.from).to_string());
+            let to = helpers::utils::format_with_0x(Hex(event.to).to_string());
+            if from == ZERO_ADDRESS && to != ZERO_ADDRESS {
+                continue;
+            }
             let profile_transferred_event : ProfileTransferred = ProfileTransferred {
-                from: helpers::utils::format_with_0x(Hex(event.from).to_string()),
-                to: helpers::utils::format_with_0x(Hex(event.to).to_string()),
+                from,
+                to,
                 profile_token_id: event.token_id.to_string(),
                 transaction_hash: helpers::utils::format_with_0x(tx_hash.clone()),
                 log_index: log.block_index().to_string(),
