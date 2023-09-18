@@ -3,7 +3,7 @@ mod helpers;
 mod pb;
 
 use anyhow::anyhow;
-use helpers::constants::{EMPTY_STRING, ZERO_ADDRESS};
+use helpers::constants::{ZERO_ADDRESS};
 use helpers::utils::{format_with_0x, is_address_valid};
 use pb::lens::events::{FollowEvents, FollowNftDeployed, FollowNftTransferred, ProfileTransferred};
 use serde::Deserialize;
@@ -91,6 +91,7 @@ fn map_lens_follower_events(params: String, blk: eth::Block) -> Result<FollowEve
         if let Some(event) = abis::lens_events::events::FollowNftTransferred::match_and_decode(log)
         {
             let from = format_with_0x(Hex(event.from).to_string());
+            let to = format_with_0x(Hex(event.to).to_string());
 
             let follow_nft_transferred_event: FollowNftTransferred = FollowNftTransferred {
                 follow_profile_id: event.profile_id.to_string(),
@@ -99,8 +100,8 @@ fn map_lens_follower_events(params: String, blk: eth::Block) -> Result<FollowEve
                 transaction_hash: helpers::utils::format_with_0x(tx_hash.clone()),
                 log_index: log.block_index().to_string(),
                 block_number: blk.number,
-                follower_address: from,
-                follow_type: EMPTY_STRING.to_string(),
+                from,
+                to,
                 ..Default::default()
             };
 

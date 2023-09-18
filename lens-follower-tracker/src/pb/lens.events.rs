@@ -44,6 +44,10 @@ pub struct FollowNftTransferred {
     pub log_index: ::prost::alloc::string::String,
     #[prost(uint64, tag="8")]
     pub block_number: u64,
+    #[prost(string, tag="9")]
+    pub from: ::prost::alloc::string::String,
+    #[prost(string, tag="10")]
+    pub to: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
