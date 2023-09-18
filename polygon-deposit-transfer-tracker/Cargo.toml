@@ -1,5 +1,5 @@
 [package]
-name = "transfer-tracker-substream"
+name = "polygon-deposit-transfer-tracker-substream"
 version = "0.1.0"
 edition = "2021"
 
