@@ -28,6 +28,8 @@ message FollowNFTTransferred {
   string transactionHash = 6;
   string logIndex = 7;
   uint64 blockNumber = 8;
+  string from = 9;
+  string to = 10;
 }
 
 message ProfileTransferred {
