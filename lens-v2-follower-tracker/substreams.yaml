@@ -1,0 +1,31 @@
+specVersion: v0.1.0
+package:
+  name: lens_v2_follower_tracker
+  version: v0.1.0
+
+imports:
+  eth: https://github.com/streamingfast/sf-ethereum/releases/download/v0.10.2/ethereum-v0.10.4.spkg
+
+protobuf:
+  files:
+    - lens_events.proto
+  importPaths:
+    - ./proto
+
+binaries:
+  default:
+    type: wasm/rust-v1
+    file: target/wasm32-unknown-unknown/release/lens_v2_follower_tracker.wasm
+
+params: 
+  map_lens_follower_events: "lpp_contract_address=0xC1E77eE73403B8a7478884915aA599932A677870"
+
+modules:
+  - name: map_lens_follower_events
+    kind: map
+    initialBlock: 40911880
+    inputs:
+      - params: string
+      - source: sf.ethereum.type.v2.Block
+    output:
+      type: proto:lens.events.FollowEvents

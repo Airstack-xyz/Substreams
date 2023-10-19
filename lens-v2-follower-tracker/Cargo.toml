@@ -1,0 +1,38 @@
+[package]
+name = "lens_v2_follower_tracker"
+version = "0.1.0"
+description = "This project is to track the follower of lens-v2"
+edition = "2021"
+repository = "https://github.com/Airstack-xyz/Substreams"
+license = "Apache 2.0"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+anyhow = "1"
+ethabi = "17"
+hex-literal = "0.3"
+num-bigint = "0.4"
+prost = "0.11"
+# Use latest from https://crates.io/crates/substreams
+substreams = "0.5"
+# Use latest from https://crates.io/crates/substreams-database-change
+substreams-database-change = "1.2"
+# Use latest from https://crates.io/crates/substreams-ethereum
+substreams-ethereum = "0.9"
+serde_qs = "0.12.0"
+serde = { version = "1.0", features = ["derive"] }
+
+# Required so that ethabi > ethereum-types build correctly under wasm32-unknown-unknown
+[target.wasm32-unknown-unknown.dependencies]
+getrandom = { version = "0.2", features = ["custom"] }
+
+[build-dependencies]
+anyhow = "1"
+substreams-ethereum = "0.9"
+
+[profile.release]
+lto = true
+opt-level = 's'
+strip = "debuginfo"
