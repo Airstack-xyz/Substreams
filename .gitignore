@@ -15,3 +15,4 @@ Cargo.lock
 **/target/
 **/*.spkg
 **/buf.gen.yaml
+**/replay.log

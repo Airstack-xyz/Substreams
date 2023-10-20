@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package lens.events;
+
+
+message FollowEvents {
+  repeated Follow follow_events = 1;
+  repeated Unfollow unfollow_events = 2;
+  
+}
+
+message Follow {
+    string follower_profile_id = 1;
+    string id_of_profile_followed = 2;
+    string follow_token_id_assigned = 3;
+    string follow_module_data = 4;
+    string process_follow_module_return_data = 5;
+    string transaction_executor = 6;
+    uint64 timestamp = 7;
+    string transaction_hash = 8;
+    string log_index = 9;
+    uint64 block_number = 10;
+}
+
+message Unfollow {
+  string unfollower_profile_id = 1;
+  string id_of_profile_unfollowed = 2;
+  string transaction_executor = 3;
+  uint64 timestamp = 4;
+  string transaction_hash = 5;
+  string log_index = 6;
+  uint64 block_number = 7;
+}
+
+
+
