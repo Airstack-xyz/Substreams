@@ -31,9 +31,9 @@ fn map_lens_follower_events(params: String, blk: eth::Block) -> Result<FollowEve
     // below block will process the follow related events
     for log in blk.logs() {
         let tx_hash = Hex(log.receipt.transaction.hash.clone()).to_string();
-        let addres: String = format_with_0x(Hex(log.address().clone()).to_string());
+        let address: String = format_with_0x(Hex(log.address().clone()).to_string());
 
-        if !lpp_contract_address.to_lowercase().contains(&addres) {
+        if !lpp_contract_address.to_lowercase().contains(&address) {
             continue;
         }
         if let Some(event) = abis::lens_events::events::Followed::match_and_decode(log) {
