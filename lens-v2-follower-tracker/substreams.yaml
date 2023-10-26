@@ -18,12 +18,12 @@ binaries:
     file: target/wasm32-unknown-unknown/release/lens_v2_follower_tracker.wasm
 
 params: 
-  map_lens_follower_events: "lpp_contract_address=0xC1E77eE73403B8a7478884915aA599932A677870"
+  map_lens_follower_events: "lpp_contract_address=0xdb46d1dc155634fbc732f92e853b10b288ad5a1d"
 
 modules:
   - name: map_lens_follower_events
     kind: map
-    initialBlock: 40911880
+    initialBlock: 49299999
     inputs:
       - params: string
       - source: sf.ethereum.type.v2.Block
