@@ -71,7 +71,7 @@ fn map_transfers(blk: eth::Block) -> Result<Transfers, Error> {
                 token_address: helpers::utils::format_with_0x(
                     Hex(log.clone().address()).to_string(),
                 ),
-                chain_id: 1.to_string(),
+                chain_id: 137.to_string(),
                 log_index: log.block_index(),
                 source: 1,
                 transaction_hash: helpers::utils::format_with_0x(tx_hash.clone()),
@@ -105,7 +105,7 @@ fn map_transfers(blk: eth::Block) -> Result<Transfers, Error> {
                 transaction_hash: helpers::utils::format_with_0x(tx_hash.clone()),
                 log_index: log.block_index(),
                 source: 1,
-                chain_id: 1.to_string(),
+                chain_id: 137.to_string(),
                 token_address: helpers::utils::format_with_0x(
                     Hex(log.log.clone().address).to_string(),
                 ),
@@ -141,7 +141,7 @@ fn map_transfers(blk: eth::Block) -> Result<Transfers, Error> {
                 transaction_hash: helpers::utils::format_with_0x(tx_hash.clone()),
                 log_index: log.block_index(),
                 source: 1,
-                chain_id: 1.to_string(),
+                chain_id: 137.to_string(),
                 token_address: helpers::utils::format_with_0x(
                     Hex(log.log.clone().address).to_string(),
                 ),
