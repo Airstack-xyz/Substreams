@@ -1,7 +1,7 @@
 specVersion: v0.1.0
 package:
   name: polygon_deposit_transfer_tracker
-  version: v0.2.0
+  version: v0.2.1
 
 imports:
   eth: https://github.com/streamingfast/sf-ethereum/releases/download/v0.10.2/ethereum-v0.10.4.spkg
