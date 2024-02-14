@@ -1,18 +1,17 @@
     const INTERNAL_ERR: &'static str = "`ethabi_derive` internal error";
     /// Contract's functions.
-    #[allow(dead_code)]
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_imports, unused_variables)]
     pub mod functions {
         use super::INTERNAL_ERR;
     }
     /// Contract's events.
-    #[allow(dead_code)]
+    #[allow(dead_code, unused_imports, unused_variables)]
     pub mod events {
         use super::INTERNAL_ERR;
         #[derive(Debug, Clone, PartialEq)]
         pub struct Deposit {
             pub dst: Vec<u8>,
-            pub wad: ethabi::Uint,
+            pub wad: substreams::scalar::BigInt,
         }
         impl Deposit {
             const TOPIC_ID: [u8; 32] = [
@@ -66,7 +65,7 @@
                         &[ethabi::ParamType::Uint(256usize)],
                         log.data.as_ref(),
                     )
-                    .map_err(|e| format!("unable to decode log.data: {}", e))?;
+                    .map_err(|e| format!("unable to decode log.data: {:?}", e))?;
                 values.reverse();
                 Ok(Self {
                     dst: ethabi::decode(
@@ -75,7 +74,7 @@
                         )
                         .map_err(|e| {
                             format!(
-                                "unable to decode param 'dst' from topic of type 'address': {}",
+                                "unable to decode param 'dst' from topic of type 'address': {:?}",
                                 e
                             )
                         })?
@@ -85,11 +84,16 @@
                         .expect(INTERNAL_ERR)
                         .as_bytes()
                         .to_vec(),
-                    wad: values
-                        .pop()
-                        .expect(INTERNAL_ERR)
-                        .into_uint()
-                        .expect(INTERNAL_ERR),
+                    wad: {
+                        let mut v = [0 as u8; 32];
+                        values
+                            .pop()
+                            .expect(INTERNAL_ERR)
+                            .into_uint()
+                            .expect(INTERNAL_ERR)
+                            .to_big_endian(v.as_mut_slice());
+                        substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
+                    },
                 })
             }
         }
@@ -107,7 +111,7 @@
         #[derive(Debug, Clone, PartialEq)]
         pub struct Withdrawal {
             pub src: Vec<u8>,
-            pub wad: ethabi::Uint,
+            pub wad: substreams::scalar::BigInt,
         }
         impl Withdrawal {
             const TOPIC_ID: [u8; 32] = [
@@ -161,7 +165,7 @@
                         &[ethabi::ParamType::Uint(256usize)],
                         log.data.as_ref(),
                     )
-                    .map_err(|e| format!("unable to decode log.data: {}", e))?;
+                    .map_err(|e| format!("unable to decode log.data: {:?}", e))?;
                 values.reverse();
                 Ok(Self {
                     src: ethabi::decode(
@@ -170,7 +174,7 @@
                         )
                         .map_err(|e| {
                             format!(
-                                "unable to decode param 'src' from topic of type 'address': {}",
+                                "unable to decode param 'src' from topic of type 'address': {:?}",
                                 e
                             )
                         })?
@@ -180,11 +184,16 @@
                         .expect(INTERNAL_ERR)
                         .as_bytes()
                         .to_vec(),
-                    wad: values
-                        .pop()
-                        .expect(INTERNAL_ERR)
-                        .into_uint()
-                        .expect(INTERNAL_ERR),
+                    wad: {
+                        let mut v = [0 as u8; 32];
+                        values
+                            .pop()
+                            .expect(INTERNAL_ERR)
+                            .into_uint()
+                            .expect(INTERNAL_ERR)
+                            .to_big_endian(v.as_mut_slice());
+                        substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
+                    },
                 })
             }
         }
