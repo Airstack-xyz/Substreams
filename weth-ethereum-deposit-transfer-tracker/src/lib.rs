@@ -2,22 +2,32 @@ mod abis;
 mod helpers;
 mod pb;
 
-use pb::transfer_tracker::{Transfer, Transfers};
+use anyhow::anyhow;
+use pb::transfer_tracker::{ Transfer, Transfers};
 use substreams::errors::Error;
+use serde::Deserialize;
 use substreams::{log, Hex};
 use substreams_ethereum::{pb::eth::v2 as eth, Event as EventTrait};
 
+#[derive(Deserialize)]
+struct InputFilters {
+    weth_contract_address: Option<String>,
+}
+
 #[substreams::handlers::map]
-fn map_transfers(blk: eth::Block) -> Result<Transfers, Error> {
+fn map_transfers(params: String, blk: eth::Block) -> Result<Transfers, Vec<Error>> {
     let mut transfers = vec![];
+    let filters: InputFilters = parse_filters_from_params(params)?;
+    let weth_contract_address: String = filters.weth_contract_address.expect("weth_contract_address is already verified");
     for log in blk.logs() {
         let tx_hash = Hex(log.receipt.transaction.hash.clone()).to_string();
         log::info!("Tx Hash {}", tx_hash);
+
         let token_address = helpers::utils::format_with_0x(
             Hex(log.clone().address()).to_string(),
         );
-        //wETH Ethereum Address
-        if token_address == "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2".to_string(){
+        
+        if token_address == weth_contract_address.to_string(){
             if let Some(event) = abis::weth::events::Deposit::match_and_decode(log) {
                 let erc20_transfer: Transfer = Transfer {
                     amount: event.wad.to_string(),
@@ -32,7 +42,7 @@ fn map_transfers(blk: eth::Block) -> Result<Transfers, Error> {
                     operator: helpers::utils::format_with_0x(
                         Hex(log.receipt.transaction.from.clone()).to_string(),
                     ),
-                    from: String::from("0x0000000000000000000000000000000000000000"),
+                    from: helpers::constants::ZERO_ADDRESS.to_string(),
                     to: helpers::utils::format_with_0x(Hex(event.dst).to_string()),
                     token_type: 0,
                     block_number: blk.number,
@@ -66,7 +76,7 @@ fn map_transfers(blk: eth::Block) -> Result<Transfers, Error> {
                         Hex(log.receipt.transaction.from.clone()).to_string(),
                     ),
                     from: helpers::utils::format_with_0x(Hex(event.src).to_string()),
-                    to: String::from("0x0000000000000000000000000000000000000000"),
+                    to: helpers::constants::ZERO_ADDRESS.to_string(),
                     token_type: 0,
                     block_number: blk.number,
                     block_timestamp: blk
@@ -89,4 +99,38 @@ fn map_transfers(blk: eth::Block) -> Result<Transfers, Error> {
     Ok(Transfers {
         transfers,
     })
+}
+
+fn parse_filters_from_params(
+    params: String,
+) -> Result<InputFilters, Vec<substreams::errors::Error>> {
+    let parsed_result = serde_qs::from_str(&params);
+    if parsed_result.is_err() {
+        return Err(Vec::from([anyhow!(
+            "Unexpected error while parsing parameters"
+        )]));
+    }
+
+    let filters = parsed_result.unwrap();
+    verify_filters(&filters)?;
+
+    Ok(filters)
+}
+
+fn verify_filters(params: &InputFilters) -> Result<(), Vec<substreams::errors::Error>> {
+    let mut errors: Vec<substreams::errors::Error> = Vec::new();
+
+    let weth_contract_address = params.weth_contract_address.as_ref().unwrap();
+    if !helpers::utils::is_address_valid(weth_contract_address) {
+        errors.push(anyhow!(
+            "'weth_contract_address' address ({}) is not valid",
+            weth_contract_address
+        ));
+    }
+
+    if errors.len() > 0 {
+        return Err(errors);
+    }
+
+    Ok(())
 }
