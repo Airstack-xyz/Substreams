@@ -4,10 +4,6 @@
 pub struct Transfers {
     #[prost(message, repeated, tag="1")]
     pub transfers: ::prost::alloc::vec::Vec<Transfer>,
-    #[prost(message, repeated, tag="2")]
-    pub erc1155_transfer_batchs: ::prost::alloc::vec::Vec<Erc1155TransferBatch>,
-    #[prost(message, repeated, tag="3")]
-    pub erc1155_transfer_singles: ::prost::alloc::vec::Vec<Erc1155TransferSingle>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -41,66 +37,6 @@ pub struct Transfer {
     #[prost(uint64, tag="14")]
     pub block_number: u64,
     #[prost(uint64, tag="15")]
-    pub block_timestamp: u64,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct Erc1155TransferBatch {
-    #[prost(string, tag="1")]
-    pub transaction_hash: ::prost::alloc::string::String,
-    #[prost(uint32, tag="2")]
-    pub log_index: u32,
-    #[prost(enumeration="Source", tag="3")]
-    pub source: i32,
-    #[prost(string, tag="4")]
-    pub chain_id: ::prost::alloc::string::String,
-    #[prost(string, tag="5")]
-    pub token_address: ::prost::alloc::string::String,
-    #[prost(string, repeated, tag="6")]
-    pub token_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    #[prost(string, tag="7")]
-    pub operator: ::prost::alloc::string::String,
-    #[prost(string, tag="8")]
-    pub from: ::prost::alloc::string::String,
-    #[prost(string, tag="9")]
-    pub to: ::prost::alloc::string::String,
-    #[prost(string, repeated, tag="10")]
-    pub amounts: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    #[prost(enumeration="TokenStandard", tag="11")]
-    pub token_type: i32,
-    #[prost(uint64, tag="12")]
-    pub block_number: u64,
-    #[prost(uint64, tag="13")]
-    pub block_timestamp: u64,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct Erc1155TransferSingle {
-    #[prost(string, tag="1")]
-    pub transaction_hash: ::prost::alloc::string::String,
-    #[prost(uint32, tag="2")]
-    pub log_index: u32,
-    #[prost(enumeration="Source", tag="3")]
-    pub source: i32,
-    #[prost(string, tag="4")]
-    pub chain_id: ::prost::alloc::string::String,
-    #[prost(string, tag="5")]
-    pub token_address: ::prost::alloc::string::String,
-    #[prost(string, tag="6")]
-    pub token_id: ::prost::alloc::string::String,
-    #[prost(string, tag="7")]
-    pub operator: ::prost::alloc::string::String,
-    #[prost(string, tag="8")]
-    pub from: ::prost::alloc::string::String,
-    #[prost(string, tag="9")]
-    pub to: ::prost::alloc::string::String,
-    #[prost(string, tag="10")]
-    pub amount: ::prost::alloc::string::String,
-    #[prost(enumeration="TokenStandard", tag="11")]
-    pub token_type: i32,
-    #[prost(uint64, tag="12")]
-    pub block_number: u64,
-    #[prost(uint64, tag="13")]
     pub block_timestamp: u64,
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]

@@ -1,6 +1,6 @@
 specVersion: v0.1.0
 package:
-  name: transfer_tracker
+  name: weth_deposit_transfer_tracker
   version: v0.1.0
 
 imports:
